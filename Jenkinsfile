@@ -1,46 +1,67 @@
 pipeline {
-   agent any
-
-   stages {
-      stage("Checkout") {
-         steps {
-            echo "Checking out fab... on $NODE_NAME : with the following labels $NODE_LABELS"
-         }
+  agent any
+  stages {
+    stage('Clone-Fab') {
+      steps {
+        echo "Checking out fab... on $NODE_NAME : with the following labels $NODE_LABELS"
       }
+    }
 
-      stage("Cloning") {
-         steps {
-            echo "Clone other dependent repos with fab.mod & setup.sh"
-         }
+    stage('Exec-fab-mod-all') {
+      steps {
+        echo 'Clone other dependent repos with fab.mod & setup.sh'
       }
+    }
 
-      stage("Build RELEASE") {
-         steps {
-            echo "Build release service services with fab build.clean build.all"
-         }
+    stage('Build(Release)') {
+      steps {
+        echo 'Build release service services with fab build.clean build.all'
       }
+    }
 
-      stage("Testing") {
-         steps {
-            echo "Test RELEASE mode with fab test.all"
-         }
+    stage('Testing(Release)') {
+      steps {
+        echo 'Test RELEASE mode with fab test.all'
       }
+    }
 
-   }
-
-   post {
-      always {
-         echo "Always interpret the test reports"
+    stage('Analyze(Release)') {
+      steps {
+        echo 'Analyzing results from release regression tests.'
       }
+    }
 
-      success {
-         echo "Only performs this task on success"
+    stage('Build(Debug)') {
+      steps {
+        echo 'Bulding DEUG build of tRoot H5'
       }
+    }
 
-      failure {
-         echo "Report why the pipe-line failed"
+    stage('Testing(Debug)') {
+      steps {
+        echo 'Executing test cases for DEBUG build'
       }
+    }
 
-   }
+    stage('Analyze(Debug)') {
+      steps {
+        echo 'Analyzing tesing cases for DEBUG build'
+      }
+    }
 
+  }
+  post {
+    always {
+      echo 'Always interpret the test reports'
+    }
+
+    success {
+      echo 'Only performs this task on success'
+    }
+
+    failure {
+      echo 'Report why the pipe-line failed'
+    }
+
+  }
 }
