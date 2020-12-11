@@ -13,21 +13,21 @@ pipeline {
       }
     }
 
-    stage('Build(Release)') {
+    stage('Build(Debug)') {
       parallel {
-        stage('Build(Release)') {
-          steps {
-            echo 'Build release service services with fab build.clean build.all'
-            echo 'Testing Release Build'
-            echo 'Analyzing Release Build Results'
-          }
-        }
-
         stage('Build(Debug)') {
           steps {
             echo 'Build Debug Configuration'
             echo 'Testing Debug Build'
             echo 'Analyzing Debug Build Results'
+          }
+        }
+
+        stage('Build(Release)') {
+          steps {
+            echo 'Build Release Configuration'
+            echo 'Test Release Build'
+            echo 'Analyze Release Build Results'
           }
         }
 
