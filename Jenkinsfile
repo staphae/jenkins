@@ -14,38 +14,23 @@ pipeline {
     }
 
     stage('Build(Release)') {
-      steps {
-        echo 'Build release service services with fab build.clean build.all'
-      }
-    }
+      parallel {
+        stage('Build(Release)') {
+          steps {
+            echo 'Build release service services with fab build.clean build.all'
+            echo 'Testing Release Build'
+            echo 'Analyzing Release Build Results'
+          }
+        }
 
-    stage('Testing(Release)') {
-      steps {
-        echo 'Test RELEASE mode with fab test.all'
-      }
-    }
+        stage('Build(Debug)') {
+          steps {
+            echo 'Build Debug Configuration'
+            echo 'Testing Debug Build'
+            echo 'Analyzing Debug Build Results'
+          }
+        }
 
-    stage('Analyze(Release)') {
-      steps {
-        echo 'Analyzing results from release regression tests.'
-      }
-    }
-
-    stage('Build(Debug)') {
-      steps {
-        echo 'Bulding DEUG build of tRoot H5'
-      }
-    }
-
-    stage('Testing(Debug)') {
-      steps {
-        echo 'Executing test cases for DEBUG build'
-      }
-    }
-
-    stage('Analyze(Debug)') {
-      steps {
-        echo 'Analyzing tesing cases for DEBUG build'
       }
     }
 
